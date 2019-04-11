@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8B0F5DC9-B2EB-4FDC-8BAF-FEC3A8B71144}</ProjectGuid>
     <RootNamespace>TuringMachine</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -110,6 +110,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Crash.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Final_States.h" />
     <ClInclude Include="Input_Alphabet.h" />
@@ -121,6 +122,7 @@
     <ClInclude Include="Turing_Machine.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Crash.cpp" />
     <ClCompile Include="Final_States.cpp" />
     <ClCompile Include="Input_Alphabet.cpp" />
     <ClCompile Include="majesticTuring.cpp" />
