@@ -114,24 +114,29 @@
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Final_States.h" />
     <ClInclude Include="Input_Alphabet.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="States.h" />
+    <ClInclude Include="String_pointer.h" />
     <ClInclude Include="Tape.h" />
     <ClInclude Include="Tape_Alphabet.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="Transition_Function.h" />
     <ClInclude Include="Turing_Machine.h" />
+    <ClInclude Include="Uppercase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Crash.cpp" />
     <ClCompile Include="Final_States.cpp" />
     <ClCompile Include="Input_Alphabet.cpp" />
     <ClCompile Include="majesticTuring.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="States.cpp" />
     <ClCompile Include="Tape.cpp" />
     <ClCompile Include="Tape_Alphabet.cpp" />
     <ClCompile Include="Transition.cpp" />
     <ClCompile Include="Transition_Function.cpp" />
     <ClCompile Include="Turing_Machine.cpp" />
+    <ClCompile Include="Uppercase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="majestic.def" />

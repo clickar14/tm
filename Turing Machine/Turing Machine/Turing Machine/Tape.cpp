@@ -2,8 +2,8 @@
 #include "Input_Alphabet.h"
 #include "Tape_Alphabet.h"
 #include "Direction.h"
-#include "Uppercase.h"
 #include "Crash.h"
+#include "Uppercase.h"
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -93,7 +93,7 @@ int main(){
 void Tape::update(char write_character, direction move_direction)
 {
     // If attempting to move left and at start at tape return.
-    move_direction = uppercase(move_direction);
+    move_direction = uppercase(move_direction)[0];
     if ((move_direction == 'L') && (current_cell == 0))
         throw crash("Left move from first cell");
     //Append blank character to end of cells if at the end and attempting to move right
@@ -122,7 +122,7 @@ string Tape::left(int maximum_number_of_cells) const
 string Tape::right(int maximum_number_of_cells) const
 {
     int endCell = all_cells.length() - 1;
-    while ((endCell >= current_cell) && all_cells[endCell] == blank_character))
+    while ((endCell >= current_cell) && (all_cells[endCell] == blank_character))
         --endCell;
     int lastCell = min(endCell, current_cell + maximum_number_of_cells - 1);
     string value = all_cells.substr(current_cell, lastCell - current_cell + 1);
