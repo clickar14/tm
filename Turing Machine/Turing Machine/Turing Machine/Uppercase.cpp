@@ -10,9 +10,7 @@ string uppercase(string input)
 }
 string uppercase(direction input)
 {
-    string returnVal;
-    returnVal.push_back(input);
-    transform(returnVal.begin(), returnVal.end(), returnVal.begin(), ::toupper);
-
+    input = toupper(input);
+    string returnVal = { input };
     return returnVal;
 }

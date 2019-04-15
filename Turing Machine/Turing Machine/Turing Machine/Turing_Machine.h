@@ -15,7 +15,7 @@ class Turing_Machine
 {
 private:
     Tape tape;
-    Input_Alphabet inpute_alphabet;
+    Input_Alphabet input_alphabet;
     Tape_Alphabet tape_alphabet;
     Transition_Function transition_function;
     States all_states;
@@ -23,7 +23,7 @@ private:
     vector<string> description;
     string initial_state;
     string current_state;
-    string original_inpute_string;
+    string original_input_string;
     int number_of_transitions;
     bool valid;
     bool used;

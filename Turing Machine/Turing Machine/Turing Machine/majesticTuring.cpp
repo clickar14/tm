@@ -12,32 +12,15 @@ int main(int argc, char* argv[]) {
     bool validTuringMachine = true;
     Turing_Machine turing_machine = Turing_Machine(fileName);
 
-
     // Check Turing machine definition file, returns true if file is valid
     // runTuringMachine = readTMDef(fileName);
-    if (validTuringMachine) {
-        cout << "Definition file successfully loaded!" << endl;
-    }
-    else {
-        cout << "Definition file failed to load!" << endl;
-        exit(0);
-    }
-    // Check input string file, returns true if file is valid.
-    // runTuringMachine = readInputString(fileName);
-    if (validTuringMachine) {
-        cout << "Input string file successfully loaded!" << endl;
-    }
-    else {
-        cout << "Input string file failed to load!" << endl;
-        exit(0);
-    }
-    // Initialize test variables
+
     string input;
     char command;
     int maxTrans = 1;
 
     // If both files loaded successfully, continue to command menu.
-    while (validTuringMachine) {
+    while (turing_machine.is_valid_definition()) {
         cout << "\nCommand: ";
         getline(cin, input);
         // If input is a single charecter

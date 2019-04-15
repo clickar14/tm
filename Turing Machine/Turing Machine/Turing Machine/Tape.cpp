@@ -20,20 +20,20 @@ Tape::Tape():
    
 }
 
-void Tape::load(ifstream & definition, bool & valid)
+void Tape::load(ifstream& definition, bool & valid)
 {
     string value;
     if((definition >> value) && (value.length() == 1) && (value[0] != '\\') && (value[0] != '[') && (value[0] != ']') && (value[0] != '<') && (value[0] != '>') && (value[0] != '!') && (value [0] != '~'))
         blank_character = value[0];
     else
     {
-        cout << "Illegal blank character. \n";
+        cout << "\nTAPE ERROR: Illegal blank character '" << value[0] << "'.\n";
         valid = false;
     }
     if ((!(definition >> value)) ||
         (uppercase(value) != "FINAL_STATES:"))
     {
-        cout << "Missing keyword after blank character.\n";
+        cout << "\nTAPE ERROR: Missing keyword 'FINAL_STATES:' after blank character.\n";
         valid = false;
     }
 }
@@ -42,12 +42,12 @@ void Tape::validate(const Tape_Alphabet & tape_alphabet, const Input_Alphabet & 
 {
     if (input_alphabet.is_element(blank_character))
     {
-        cout << "Blank character " << blank_character << " is in input alphabet.\n";
+        cout << "\nTAPE VALIDATION ERROR: Blank character " << blank_character << " is in input alphabet.\n";
         valid = false;
     }
     if (!tape_alphabet.is_element(blank_character))
     {
-        cout << "Blank character " << blank_character << " is not in tape alphabet.\n";
+        cout << "\nTAPE VALIDATION ERROR: Blank character " << blank_character << " is not in tape alphabet.\n";
         valid = false;
     }
 }
@@ -62,33 +62,6 @@ void Tape::initialize(string input_string)
     all_cells = input_string + blank_character;
     current_cell = 0;
 }
-
-/* DELETE LATER
-BAD_ALLOC is derived from the base class Exception
-main prog example
-#include "Tape.h"
-#include "Direction.h"
-#include <exception>
-#include <string>
-#include <iostream>
-using namespace std;
-
-int main(){
-    const int success(0);
-    Tape tape;
-    tape.initialize("AABB");
-    try
-    {
-        tape.update('B','L');
-    }
-    catch(exception& error)
-    {
-        cout << error.what() << ".\n";
-    }
-    tape.view()
-    return success;
-}
-*/
 
 void Tape::update(char write_character, direction move_direction)
 {
