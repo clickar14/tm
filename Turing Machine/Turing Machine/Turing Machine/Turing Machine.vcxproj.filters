@@ -48,9 +48,6 @@
     <ClInclude Include="Uppercase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="String_pointer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Transition.cpp">

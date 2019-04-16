@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8B0F5DC9-B2EB-4FDC-8BAF-FEC3A8B71144}</ProjectGuid>
     <RootNamespace>TuringMachine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -40,7 +40,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -115,7 +115,6 @@
     <ClInclude Include="Final_States.h" />
     <ClInclude Include="Input_Alphabet.h" />
     <ClInclude Include="States.h" />
-    <ClInclude Include="String_pointer.h" />
     <ClInclude Include="Tape.h" />
     <ClInclude Include="Tape_Alphabet.h" />
     <ClInclude Include="Transition.h" />

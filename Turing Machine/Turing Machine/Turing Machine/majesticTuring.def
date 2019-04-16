@@ -1,8 +1,18 @@
-States: S0 S1
-Input_Alphabet:
-Tape_Alphabet: -
-Transition_Function: 
-S0  -		S1  - R
+This tm accepts the language of one or more A’s followed by the same number of B’s.
+States: S0 S1 S2 S3 S4
+Input_Alphabet: A B
+Tape_Alphabet: A B X Y –
+Transition_Function:
+S0 A S1 X R
+S0 Y S3 Y R
+S1 A S1 A R
+S1 B S2 Y L
+S1 Y S1 Y R
+S2 A S2 A L
+S2 Y S0 X R
+S2 Y S2 Y L
+S3 Y S3 Y R
+S3 – S4 – R
 Initial_State: S0
-Blank_Character: -
-Final_States: S1
+Blank_Character: –
+Final_States: S4

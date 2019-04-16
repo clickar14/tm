@@ -16,7 +16,13 @@ void Transition_Function::load(ifstream& definition, bool& valid)
 {
     string value;
 
-    if ((!(definition >> value)) || ((uppercase(value) == "INITIAL_STATE:")))
+    if (!(definition >> value))
+    {
+        cout << "\nTRANSITION_FUNCTION ERROR: Reached EOF before other keywords could be loaded.\n";
+        valid = false;
+        return;
+    }
+    if((uppercase(value) == "INITIAL_STATE:"))
     {
         cout << "\nTRANSITION_FUNCTION ERROR: There are no transitions defined in the TRANSITION_FUNCTION.\n";
         valid = false;
@@ -45,6 +51,12 @@ void Transition_Function::load(ifstream& definition, bool& valid)
             cout << "State names may only contain letters, numbers, and underscores!\n";
             valid = false;
         }
+        else if((value[value.size()-1] == ':') && ((uppercase(value) != "INITIAL_STATE:")))
+        {
+            cout << "\nTRANSITION_FUNCTION ERROR: Encountered unexpected keyword '" << value << "' in transition definition entry.\n";
+            valid = false;
+            return;
+        }
         else
         {
             source = value;
@@ -60,6 +72,12 @@ void Transition_Function::load(ifstream& definition, bool& valid)
         // Check if read character is valid
         if ((value.size() == 1) && (value[0] != '\\') && (value[0] != '[') && (value[0] != ']') && (value[0] != '<') && (value[0] != '>') && (value[0] != '!') && (value[0] != '~'))
             read = value[0];
+        else if ((value[value.size() - 1] == ':') && ((uppercase(value) != "INITIAL_STATE:")))
+        {
+            cout << "\nTRANSITION_FUNCTION ERROR: Encountered unexpected keyword '" << value << "' in transition definition entry.\n";
+            valid = false;
+            return;
+        }
         else
         {
             cout << "\nTRANSITION_FUNCTION ERROR: Illegal read character '" << value[0] << "'.\n";
@@ -91,6 +109,12 @@ void Transition_Function::load(ifstream& definition, bool& valid)
             cout << "State names may only contain letters, numbers, and underscores!\n";
             valid = false;
         }
+        else if ((value[value.size() - 1] == ':') && ((uppercase(value) != "INITIAL_STATE:")))
+        {
+            cout << "\nTRANSITION_FUNCTION ERROR: Encountered unexpected keyword '" << value << "' in transition definition entry.\n";
+            valid = false;
+            return;
+        }
         else
         {
             destination = value;
@@ -106,6 +130,12 @@ void Transition_Function::load(ifstream& definition, bool& valid)
         // Check if write character is valid
         if ((value.size() == 1) && (value[0] != '\\') && (value[0] != '[') && (value[0] != ']') && (value[0] != '<') && (value[0] != '>') && (value[0] != '!') && (value[0] != '~'))
             write = value[0];
+        else if ((value[value.size() - 1] == ':') && ((uppercase(value) != "INITIAL_STATE:")))
+        {
+            cout << "\nTRANSITION_FUNCTION ERROR: Encountered unexpected keyword '" << value << "' in transition definition entry.\n";
+            valid = false;
+            return;
+        }
         else
         {
             cout << "\nTRANSITION_FUNCTION ERROR: Illegal write character '" << value[0] << "'.\n";
@@ -123,6 +153,12 @@ void Transition_Function::load(ifstream& definition, bool& valid)
         // Check if direction character is valid
         if ((value.size() == 1) && ((uppercase(value[0])[0] == 'L') || ((uppercase(value[0])[0] == 'R'))))
             move = value[0];
+        else if ((value[value.size() - 1] == ':') && ((uppercase(value) != "INITIAL_STATE:")))
+        {
+            cout << "\nTRANSITION_FUNCTION ERROR: Encountered unexpected keyword '" << value << "' in transition definition entry.\n";
+            valid = false;
+            return;
+        }
         else
         {
             cout << "\nTRANSITION_FUNCTION ERROR: Illegal direction character '" << value[0] << "'.\n";
@@ -147,7 +183,7 @@ void Transition_Function::load(ifstream& definition, bool& valid)
             valid = false;
             return;
         }
-        if  (uppercase(value) == "INITIAL_STATE:")
+        else if (uppercase(value) == "INITIAL_STATE:")
         {
             return;
         }
@@ -184,6 +220,7 @@ void Transition_Function::validate(const Tape_Alphabet& tape_alphabet, const Sta
         }
     }
 }
+// TODO: Finish
 void Transition_Function::view() const 
 {
 

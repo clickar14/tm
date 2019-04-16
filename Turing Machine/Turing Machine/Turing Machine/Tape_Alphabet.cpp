@@ -43,9 +43,17 @@ void Tape_Alphabet::load(ifstream& definition, bool& valid)
                     alphabet.push_back(value[0]);
             }
         }
-        else
+        else if(value.size() > 1)
         {
-            cout << "\nTAPE_ALPHABET ERROR: Illegal alphabet character '" << value[0] << "'.\n";
+            if ((value.find(':') != -1) && (uppercase(value) != "TRANSITION_FUNCTION:") )
+            {
+                cout << "\nTAPE_ALPHABET ERROR: Encountered unexpected keyword '" << value << "' instead of expected keyword 'TRANSITION_FUNCTION:'.\n";
+                definition >> value;
+                valid = false;
+                return;
+            }
+            cout << "\nTAPE_ALPHABET ERROR: Illegal string '" << value << "' found in tape_alphabet.\n";
+            cout << "The tape_alphabet may only contain characters.\n";
             valid = false;
         }
         if ((!(definition >> value)))

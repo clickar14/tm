@@ -21,7 +21,7 @@ Turing_Machine::Turing_Machine(string definition_file_name)
     defFilename.append(".def");
     ifstream definitionFile(defFilename);
     bool fileOpenCheck = true;
-    /* Definition file checks*/
+    /* Definition file checks */
     if (!definitionFile)
     {
         cout << "FILE ERROR: THE DEFINITION FILE '" << defFilename << "' COULD NOT BE OPENED!\n"
@@ -79,41 +79,32 @@ Turing_Machine::Turing_Machine(string definition_file_name)
             {
                 // Load the states
                 all_states.load(definitionFile, valid);
-                if (!valid)
-                {
-                    cout << "\nLOAD ERROR: Errors must be fixed with STATES before loading can continue.\n";
-                    break;
-                }
+
                 // Load the input_alphabet
                 input_alphabet.load(definitionFile, valid);
-                if (!valid)
-                {
-                    cout << "\nLOAD ERROR: Errors must be fixed with INPUT_ALPHABET before loading can continue.\n";
-                    break;
-                }
+
                 // Load the tape_alphabet
                 tape_alphabet.load(definitionFile, valid);
-                if (!valid)
-                {
-                    cout << "\nLOAD ERROR: Errors must be fixed with TAPE_ALPHABET before loading can continue.\n";
-                    break;
-                }
+
                 // Load the transition_function
                 transition_function.load(definitionFile, valid);
-                if (!valid)
-                {
-                    cout << "\nLOAD ERROR: Errors must be fixed with TRANSITION_FUNCTION before loading can continue.\n";
-                    break;
-                }
 
-                // Load in the initial_state
                 definitionFile >> line;
-                if (all_states.is_element(line))
-                    initial_state = line;
+                // Load in the initial_state
+                if ((line[line.size() - 1] == ':'))
+                {
+                    cout << "INITIAL_STATE ERROR: Encountered unexpected keyword '" << line << "' instead of a valid initial state.\n";
+                    valid = false;
+                }
                 else
                 {
-                    cout << "\nINITIAL_STATE ERROR: Initial state '" << line << "' does not exist in 'STATES:'.\n";
-                    valid = false;
+                    if (all_states.is_element(line))
+                        initial_state = line;
+                    else
+                    {
+                        cout << "\nINITIAL_STATE ERROR: Initial state '" << line << "' does not exist in 'STATES:'.\n";
+                        valid = false;
+                    }
                 }
                 if ((!(definitionFile >> line)) ||
                     (uppercase(line) != "BLANK_CHARACTER:"))
@@ -121,33 +112,22 @@ Turing_Machine::Turing_Machine(string definition_file_name)
                     cout << "\nINITIAL_STATE ERROR: Missing keyword 'BLANK_CHARACTER:' after initial state.\n";
                     valid = false;
                 }
-                if (!valid)
-                {
-                    cout << "\nLOAD ERROR: Errors must be fixed with INITIAL_STATE before loading can continue.\n";
-                    break;
-                }
                 // Load in the blank_character
                 tape.load(definitionFile, valid);
-                if (!valid)
-                {
-                    cout << "\nLOAD ERROR: Errors must be fixed with BLANK_CHARACTER before loading can continue.\n";
-                    break;
-                }
+
                 // Load in the final_states
                 final_states.load(definitionFile, valid);
-                if (!valid)
-                {
-                    cout << "\nLOAD ERROR: Errors must be fixed with FINAL_STATES before loading can succeed.\n";
-                    break;
-                }
+
             }
         }
         // Validate the contents of the definition file
-
-        tape.validate(tape_alphabet, input_alphabet, valid);
-        input_alphabet.validate(tape_alphabet, valid);
-        final_states.validate(all_states, valid);
-        transition_function.validate(tape_alphabet, all_states, final_states, valid);
+        if (valid)
+        {
+            tape.validate(tape_alphabet, input_alphabet, valid);
+            input_alphabet.validate(tape_alphabet, valid);
+            final_states.validate(all_states, valid);
+            transition_function.validate(tape_alphabet, all_states, final_states, valid);
+        }
         
         if (valid)
         {
@@ -167,6 +147,7 @@ Turing_Machine::Turing_Machine(string definition_file_name)
     /* Input string file check section */
     string strFilename = definition_file_name;
     strFilename.append(".str");
+    inputFileName = strFilename;
     ifstream inputFile(strFilename);
     string line;
 
@@ -187,25 +168,24 @@ Turing_Machine::Turing_Machine(string definition_file_name)
     
     while (getline(inputFile, line))
     {
-        input_strings.push_back(line);
+        original_input_strings.push_back(line);
     }
-    vector<string> alteredInputStrings;
     bool validString = false;
-    for (int x = 0; x < input_strings.size(); ++x)
+    for (int x = 0; x < original_input_strings.size(); ++x)
     {
-        if ((input_strings[x].size() == 1) && (input_strings[x][0] == '\\'))
+        if ((original_input_strings[x].size() == 1) && (original_input_strings[x][0] == '\\'))
         {
-            alteredInputStrings.push_back("");
+            input_strings.push_back("");
         }
-        else if (input_strings[x].size() == 0)
+        else if (original_input_strings[x].size() == 0)
         {
             continue;
         }
         else
         {
-            for (int y = 0; y < input_strings[x].size(); ++y)
+            for (int y = 0; y < original_input_strings[x].size(); ++y)
             {
-                if (!input_alphabet.is_element(input_strings[x][y]))
+                if (!input_alphabet.is_element(original_input_strings[x][y]))
                 {
                     validString = false;
                     break;
@@ -214,21 +194,25 @@ Turing_Machine::Turing_Machine(string definition_file_name)
             }
             if (validString)
             {
-                alteredInputStrings.push_back(input_strings[x]);
+                input_strings.push_back(original_input_strings[x]);
             }
         }
     }
     // Remove the duplicate strings and save to input_strings
-    sort(alteredInputStrings.begin(), alteredInputStrings.end());
-    alteredInputStrings.erase(unique(alteredInputStrings.begin(), alteredInputStrings.end()), alteredInputStrings.end());
-    input_strings = alteredInputStrings;
+    sort(input_strings.begin(), input_strings.end());
+    sort(original_input_strings.begin(), original_input_strings.end());
+    input_strings.erase(unique(input_strings.begin(), input_strings.end()), input_strings.end());
 
     if (valid)
     {
         cout << "\nInput String file '" << strFilename << "' loaded successfully!\n";
+        inputFile.close();
+        definitionFile.close();
     }
+    
 }
-
+/*This function displays the description provided at the head of the definition file
+  by sending it to standard output.*/
 void Turing_Machine::view_definition() const
 {
     for (int x = 0; x < description.size(); x++)
@@ -236,11 +220,11 @@ void Turing_Machine::view_definition() const
         cout << description[x];
     }
 }
-
+//TODO: Finish
 void Turing_Machine::view_instantaneous_description(int maximum_number_of_cells) const
 {
 }
-
+//TODO: Finish
 void Turing_Machine::view_input_strings() const
 {
     for (int x = 0; x < input_strings.size(); ++x)
@@ -249,28 +233,84 @@ void Turing_Machine::view_input_strings() const
     }
 }
 
-//TODO: Finish
-void Turing_Machine::initialize(string input_string)
+//TODO: Finish and add check for used
+void Turing_Machine::initialize(int input_selection)
 {
-    original_input_string = input_string;
-}
+    // If the input string selected doesn't exist.
+    if (input_strings.size() < input_selection || input_selection < 0)
+    {
+        cout << "Invalid input string selection!\n";
+        return;
+    }
+    
+    // Load the selected input string onto the tape.
+    original_input_string = input_strings[input_selection - 1];
+    tape.initialize(original_input_string);
+    operating = true;
 
+}
+//TODO: Finish
 void Turing_Machine::perform_transitions(int maximum_number_of_transitions)
 {
-}
+    if (operating)
+    {
 
+    }
+}
+//TODO: Finish
 void Turing_Machine::terminate_operation()
 {
 }
 
+void Turing_Machine::delete_input_string(int index)
+{
+    if (index > input_strings.size() || index < 1)
+    {
+        cout << "Invalid input string selection!\n";
+    }
+    else
+    {
+        cout << "Input string '" << input_strings[index - 1] << "' was successfully deleted!\n";
+        input_strings.erase(input_strings.begin() + index - 1);
+    }
+}
+void Turing_Machine::save_input_strings()
+{
+    ofstream inputFile(inputFileName);
+    string line;
+    if (!inputFile)
+    {
+        cout << "The input strings file '" << inputFileName << "' could not be saved!\n";
+        return;
+    }
+    for (int x = 0; x < input_strings.size(); ++x)
+    {
+        inputFile << input_strings[x] << endl;
+    }
+    cout << "The input string file '" << inputFileName << "' was successfully saved!\n";
+    inputFile.close();
+}
+//TODO: Finish
 string Turing_Machine::input_string() const
 {
     return original_input_string;
 }
-
+//TODO: Finish
 int Turing_Machine::total_number_of_transitions() const
 {
-    return 0;
+    return number_of_transitions;
+}
+
+bool Turing_Machine::is_input_changed() const
+{
+    if (input_strings == original_input_strings)
+    {
+       return true;
+    }
+    else
+    {
+       return false;
+    }
 }
 
 bool Turing_Machine::is_valid_definition() const
@@ -278,15 +318,26 @@ bool Turing_Machine::is_valid_definition() const
     return valid;
 }
 
-bool Turing_Machine::is_valid_input_string(string value) const
+bool Turing_Machine::is_valid_input_string(string value)
 {
-    for (int x = 0; x < value.size(); x++)
+    for (int x = 0; x < input_strings.size(); ++x)
     {
-        if (!(input_alphabet.is_element(value[x])))
+        if (input_strings[x] == value)
         {
+            cout << "String '" << value << "' is already in the input_strings list!\n";
             return false;
         }
     }
+    for (int x = 0; x < value.size(); x++)
+    {
+
+        if (!(input_alphabet.is_element(value[x])))
+        {
+            cout << "String '" << value << "' contains characters not found in the input_alphabet!\n";
+            return false;
+        }
+    }
+    input_strings.push_back(value);
     return true;
 }
 
