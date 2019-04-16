@@ -12,11 +12,11 @@
 #include "Uppercase.h"
 
 using namespace std;
-vector<string> input_strings;
 
 Turing_Machine::Turing_Machine(string definition_file_name)
 {
     valid = true;
+    tape = Tape();
     string defFilename = definition_file_name;
     defFilename.append(".def");
     ifstream definitionFile(defFilename);
@@ -143,6 +143,7 @@ Turing_Machine::Turing_Machine(string definition_file_name)
             }
         }
         // Validate the contents of the definition file
+
         tape.validate(tape_alphabet, input_alphabet, valid);
         input_alphabet.validate(tape_alphabet, valid);
         final_states.validate(all_states, valid);
@@ -156,6 +157,11 @@ Turing_Machine::Turing_Machine(string definition_file_name)
         {
             cout << "Definition file '" << defFilename << "' loading failed!";
         }
+        // Initialize boolean flags
+        used = false;
+        operating = false;
+        accepted = false;
+        rejected = false;
     }
 
     /* Input string file check section */
@@ -164,16 +170,19 @@ Turing_Machine::Turing_Machine(string definition_file_name)
     ifstream inputFile(strFilename);
     string line;
 
-    
     if (!inputFile)
     {
         cout << "ERROR: THE INPUT STRING FILE '" << strFilename << "' COULD NOT BE OPENED!\n" << "Check file name and/or read permissions\n" << endl;
+        cout << "\nInput String file '" << strFilename << "' loading failed!\n";
         valid = false;
+        return;
     }
     else if((inputFile.peek() == std::ifstream::traits_type::eof()))
     {
         cout << "ERROR: THE INPUT STRING FILE '" << strFilename << "' IS EMPTY!" << endl;
+        cout << "\nInput String file '" << strFilename << "' loading failed!\n";
         valid = false;
+        return;
     }
     
     while (getline(inputFile, line))
@@ -184,11 +193,11 @@ Turing_Machine::Turing_Machine(string definition_file_name)
     bool validString = false;
     for (int x = 0; x < input_strings.size(); ++x)
     {
-        if ((input_strings[x].size == 1) && (input_strings[x][0] == '\\'))
+        if ((input_strings[x].size() == 1) && (input_strings[x][0] == '\\'))
         {
             alteredInputStrings.push_back("");
         }
-        else if (input_strings[x].size == 0)
+        else if (input_strings[x].size() == 0)
         {
             continue;
         }
@@ -209,26 +218,38 @@ Turing_Machine::Turing_Machine(string definition_file_name)
             }
         }
     }
-    // TODO: REMOVE DUPLICATE INPUT STRINGS
+    // Remove the duplicate strings and save to input_strings
+    sort(alteredInputStrings.begin(), alteredInputStrings.end());
+    alteredInputStrings.erase(unique(alteredInputStrings.begin(), alteredInputStrings.end()), alteredInputStrings.end());
     input_strings = alteredInputStrings;
+
     if (valid)
     {
-        cout << "Input String file '" << strFilename << "' loaded successfully!";
-    }
-    else
-    {
-        cout << "Input String file '" << strFilename << "' loading failed!";
+        cout << "\nInput String file '" << strFilename << "' loaded successfully!\n";
     }
 }
 
 void Turing_Machine::view_definition() const
 {
+    for (int x = 0; x < description.size(); x++)
+    {
+        cout << description[x];
+    }
 }
 
 void Turing_Machine::view_instantaneous_description(int maximum_number_of_cells) const
 {
 }
 
+void Turing_Machine::view_input_strings() const
+{
+    for (int x = 0; x < input_strings.size(); ++x)
+    {
+        cout << x + 1 << ". " << input_strings[x] << endl;
+    }
+}
+
+//TODO: Finish
 void Turing_Machine::initialize(string input_string)
 {
     original_input_string = input_string;
@@ -244,7 +265,7 @@ void Turing_Machine::terminate_operation()
 
 string Turing_Machine::input_string() const
 {
-    return string();
+    return original_input_string;
 }
 
 int Turing_Machine::total_number_of_transitions() const
@@ -287,10 +308,4 @@ bool Turing_Machine::is_accepted_input_string() const
 bool Turing_Machine::is_rejected_input_string() const
 {
     return rejected;
-}
-
-// Function for checking if a file is empty
-bool is_empty(std::ifstream& pFile)
-{
-    return pFile.peek() == std::ifstream::traits_type::eof();
 }

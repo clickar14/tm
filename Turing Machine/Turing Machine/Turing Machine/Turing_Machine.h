@@ -21,6 +21,7 @@ private:
     States all_states;
     Final_States final_states;
     vector<string> description;
+    vector<string> input_strings;
     string initial_state;
     string current_state;
     string original_input_string;
@@ -36,6 +37,7 @@ public:
     Turing_Machine(string definition_file_name);
     void view_definition()const;
     void view_instantaneous_description(int maximum_number_of_cells) const;
+    void view_input_strings() const;
     void initialize(string input_string);
     void perform_transitions(int maximum_number_of_transitions);
     void terminate_operation();

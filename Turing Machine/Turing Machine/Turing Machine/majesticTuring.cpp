@@ -6,14 +6,13 @@
 #define ULD "\033[0m"
 using namespace std;
 
+// TODO: Go through and add additional comments to functions.
+
 int main(int argc, char* argv[]) {
     string fileName(argv[1]);
     
-    bool validTuringMachine = true;
+    // Load in the turing machine.
     Turing_Machine turing_machine = Turing_Machine(fileName);
-
-    // Check Turing machine definition file, returns true if file is valid
-    // runTuringMachine = readTMDef(fileName);
 
     string input;
     char command;
@@ -23,6 +22,7 @@ int main(int argc, char* argv[]) {
     while (turing_machine.is_valid_definition()) {
         cout << "\nCommand: ";
         getline(cin, input);
+        cout << endl;
         // If input is a single charecter
         if (input.length() == 1) {
             // Extract input character.
@@ -46,7 +46,6 @@ int main(int argc, char* argv[]) {
                 else {
                     cout << "Failure!" << endl;
                 }
-                validTuringMachine = false;
                 break;
             case 'H':
             case 'h':
@@ -71,9 +70,7 @@ int main(int argc, char* argv[]) {
             case 'L':
             case 'l':
                 // List
-                cout << "1. AABBB" << endl;
-                cout << "2. AAB" << endl;
-                cout << "3. AABB" << endl;
+                turing_machine.view_input_strings();
                 break;
             case 'Q':
             case 'q':
@@ -92,7 +89,9 @@ int main(int argc, char* argv[]) {
             case 'R':
             case 'r':
                 // Run
-                cout << "Input string number: 3" << endl;
+                int stringNumber;
+                cout << "Input string number: ";
+
                 cout << "0. [s0]AABB" << endl;
                 cout << "1. X[s1]ABB" << endl;
                 break;

@@ -12,12 +12,18 @@ void Input_Alphabet::load(ifstream& definition, bool& valid)
 {
     string value;
 
-    if ((!(definition >> value)) || ((uppercase(value) == "TAPE_ALPHABET:")))
+    if ((!(definition >> value)))
     {
-        cout << "\nINPUT_ALPHABET ERROR: There are no characters provided for the input_alphabet.\n";
+        cout << "\nINPUT_ALPHABET ERROR: reached EOF before encountering other keywords.";
         valid = false;
         return;
     }
+    // If the input_alphabet has no characters.
+    if ((uppercase(value) == "TAPE_ALPHABET:"))
+    {
+        return;
+    }
+
     while (true)
     {
         if ((value.length() == 1) && (value[0] != '\\') && (value[0] != '[') && (value[0] != ']') && (value[0] != '<') && (value[0] != '>') && (value[0] != '!') && (value[0] != '~'))
@@ -61,7 +67,6 @@ void Input_Alphabet::load(ifstream& definition, bool& valid)
         }
     }
 }
-// TODO
 void Input_Alphabet::validate(const Tape_Alphabet& tape_alphabet, bool& valid) const
 {
     for (int x = 0; x < alphabet.size(); x++)
@@ -75,7 +80,8 @@ void Input_Alphabet::validate(const Tape_Alphabet& tape_alphabet, bool& valid) c
 }
 void Input_Alphabet::view() const
 {
-    cout << "Σ = {" << endl;
+    //TODO ADD SIGMA SYMBOL
+    cout << "SIGMA = {" << endl;
     for (int x = 0; x < alphabet.size(); ++x)
     {
         cout << " " << alphabet[x];

@@ -21,7 +21,7 @@ void Final_States::load(ifstream& definition, bool& valid)
     while (true)
     {
         /* Check whether the state name contains valid charecters or is a keyword */
-        bool checkFlag, uniqueFlag;
+        bool checkFlag = false, uniqueFlag = true;
         for (int x = 0; x < value.size(); x++)
         {
             if ((isalpha(value[x])) || (isdigit(value[x])) || (value[x] == '_'))

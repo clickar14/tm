@@ -159,27 +159,27 @@ void Transition_Function::validate(const Tape_Alphabet& tape_alphabet, const Sta
     {
         if (final_states.is_element(all_transitions[index].source_state()))
         {
-            cout << "\nTRANSITION_FUNCTION VALIDATION ERROR: Source state" << all_transitions[index].source_state() << "is in final states." << endl;
+            cout << "\nTRANSITION_FUNCTION VALIDATION ERROR: Source state " << all_transitions[index].source_state() << " is in final states.\n" << endl;
             valid = false;
         }
         if (!all_states.is_element(all_transitions[index].source_state()))
         {
-            cout << "\nTRANSITION_FUNCTION VALIDATION ERROR: Source state " << all_transitions[index].source_state() << "is not in states. \n";
+            cout << "\nTRANSITION_FUNCTION VALIDATION ERROR: Source state " << all_transitions[index].source_state() << " is not in states. \n";
             valid = false;
         }
         if (!tape_alphabet.is_element(all_transitions[index].read_character()))
         {
-            cout << "\nTRANSITION_FUNCTION VALIDATION ERROR: The read character " << all_transitions[index].read_character() << "is not in the tape alphabet. \n";
+            cout << "\nTRANSITION_FUNCTION VALIDATION ERROR: The read character " << all_transitions[index].read_character() << " is not in the tape alphabet. \n";
             valid = false;
         }
         if (!all_states.is_element(all_transitions[index].destination_state()))
         {
-            cout << "\nTRANSITION_FUNCTION VALIDATION ERROR: Destination " << all_transitions[index].destination_state() << "is not in states. /n";
+            cout << "\nTRANSITION_FUNCTION VALIDATION ERROR: Destination " << all_transitions[index].destination_state() << " is not in states. \n";
             valid = false;
         }
         if (!tape_alphabet.is_element(all_transitions[index].write_character()))
         {
-            cout << "\nTRANSITION_FUNCTION VALIDATION ERROR: Write character " << all_transitions[index].write_character() << "is not in the tape alphabet. \n";
+            cout << "\nTRANSITION_FUNCTION VALIDATION ERROR: Write character " << all_transitions[index].write_character() << " is not in the tape alphabet. \n";
             valid = false;
         }
     }
